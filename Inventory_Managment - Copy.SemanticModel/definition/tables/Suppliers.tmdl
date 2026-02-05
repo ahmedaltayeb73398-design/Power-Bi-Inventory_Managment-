@@ -1,0 +1,51 @@
+table Suppliers
+	lineageTag: 8db2d0f1-4e2c-4e79-850a-b10742b2191a
+
+	column SupplierID
+		dataType: string
+		lineageTag: 385bea96-37f9-4755-94a8-fb649619aa1d
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierName
+		dataType: string
+		lineageTag: f5b8f268-4cdc-43be-90c4-b67bcff4da8e
+		summarizeBy: none
+		sourceColumn: SupplierName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c08123e-7927-42ea-b07e-e15248f524a2
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LeadTime_Days
+		dataType: int64
+		formatString: 0
+		lineageTag: 96600efe-7539-4336-b5ac-1e4cf1649b8d
+		summarizeBy: sum
+		sourceColumn: LeadTime_Days
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Suppliers = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Power BI Projects\Inventory Management\Sources\Sources.xlsx"), null, true),
+				    Suppliers_Table = Source{[Item="Suppliers",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Suppliers_Table,{{"SupplierID", type text}, {"SupplierName", type text}, {"ProductID", Int64.Type}, {"LeadTime_Days", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

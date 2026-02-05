@@ -1,0 +1,153 @@
+table Fact_Inventory_Movements
+	lineageTag: 13ab5da7-12fa-4aef-89cb-6eb41171e1f8
+
+	measure 'Total Units Sold' =
+			
+			CALCULATE(
+			    SUM('Fact_Inventory_Movements'[MovementQty]) * -1,
+			    'Fact_Inventory_Movements'[Type] = "Sale"
+			)
+		formatString: 0
+		lineageTag: 9b423beb-38d4-4656-8b85-b5a97b46709b
+
+	measure 'Total Sales' =
+			
+			CALCULATE(
+			    SUM(Fact_Inventory_Movements[MovementQty]) *-1,
+			    Fact_Inventory_Movements[Type] = "Sale")
+		formatString: #,0
+		lineageTag: 4e14d7fb-7efc-40a7-85cd-f78e84635783
+
+	measure 'Total purchase' =
+			
+			CALCULATE(
+			    SUM(Fact_Inventory_Movements[MovementQty]),
+			    Fact_Inventory_Movements[Type] = "purchase")
+		formatString: #,0
+		lineageTag: 33275595-02c9-49cc-ab95-0f7a92e1c526
+
+	measure 'Total Movement Qty' = ```
+			
+			 SUM('Fact_Inventory_Movements'[MovementQty])
+			```
+		formatString: 0
+		lineageTag: ab6526e1-9868-454d-ba60-f2f23993336f
+
+	measure 'Stock Status' = ```
+			
+			VAR currnetStock = [Current Stock Balance]
+			VAR ReorderPoint = [Reorder Level]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    currnetStock <= 0,"out of stock",
+			    currnetStock <= ReorderPoint, "Reorder Now",
+			    "Healthy")
+			
+			```
+		lineageTag: 2642ab04-48b6-4d2d-b46a-29e078b62cfd
+
+	measure 'Reorder Level' =
+			
+			VAR SaftyStuckDays=3
+			VAR AvgSales= [Avg Daily Sales]
+			VAR AvgLeadTime= [Average Lead Time]
+			RETURN
+			(AvgSales * AvgLeadTime) +(AvgSales * SaftyStuckDays)
+		lineageTag: 6541f979-5217-4169-b8cd-35d0b3d9bc92
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Inventory Turnover' =
+			
+			DIVIDE([Total Units Sold], [Average Daily Inventory], 0)
+		lineageTag: f77e0256-9ff0-4283-b755-805699ef7bcc
+
+	measure 'Current Stock Balance' =
+			
+			CALCULATE(
+			    [Total Movement Qty],
+			    ALLSELECTED(DimDate),
+			    DimDate[FullDate]<=MAX(DimDate[FullDate]
+			))
+		formatString: #,0
+		lineageTag: 8a2fe005-22a2-4f08-8d37-4fbcd44331d9
+
+	measure 'Avg Daily Sales' =
+			
+			[Total Units Sold] / DISTINCTCOUNT('DimDate'[FullDate])
+		lineageTag: bc8a0d70-a198-4008-b303-89c156c746cc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Lead Time' =
+			
+			CALCULATE(
+			AVERAGE('Purchase'[Lead Time]),
+			USERELATIONSHIP(DimDate[FullDate],Purchase[OrderDate]))
+		lineageTag: e6167443-d946-4f94-8cbf-2764ee9f2d9a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Daily Inventory' =
+			
+			AVERAGEX(
+			    VALUES('DimDate'[FullDate]),
+			    [Current Stock Balance]
+			)
+		lineageTag: 209b14ca-e58a-4a43-a750-61a21bf1dbb4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6f577981-5a42-47d1-adca-33bfcc9d67d5
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 39a461a9-106c-46d6-9e15-121203abe3c4
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 48f96185-5565-4642-aa2a-30993111b23a
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column MovementQty
+		dataType: int64
+		formatString: 0
+		lineageTag: c6c500f8-c261-4c16-b8a6-281919cbb1ef
+		summarizeBy: sum
+		sourceColumn: MovementQty
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Inventory_Movements = m
+		mode: import
+		source =
+				let
+				    Source = Table.Combine({Fact_Sales, Opening, Purchase}),
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"PurchaseCost", "QtyOrdered", "OrderDate", "SupplierID", "PurchaseID", "SalesPrice", "SaleID"})
+				in
+				    #"Removed Columns"
+
+	changedProperty = Name
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

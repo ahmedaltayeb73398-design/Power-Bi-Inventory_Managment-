@@ -1,0 +1,118 @@
+table Purchase
+	lineageTag: c44f3e04-29de-420a-9403-9f337533628d
+
+	column PurchaseID
+		dataType: string
+		lineageTag: 31e51be2-b981-4ee3-a26d-9654f5f18020
+		summarizeBy: none
+		sourceColumn: PurchaseID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 07bbd23a-90e2-445f-ba12-036d5c1e9784
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: 9967cc94-4f79-4d76-9a1b-e54cacf408a3
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 94f84ae8-80d6-413c-9fef-f9b08cdbfcf1
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bc9a293e-4504-443b-9e2d-b704e121fa1b
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 9aea695b-8f1a-46b7-9349-b9760469f625
+			defaultHierarchy: LocalDateTable_a14b65d9-1ae4-496e-a84d-03333c407aa3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column QtyOrdered
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e375dbd-4853-45ab-bf04-225dc5b78df1
+		summarizeBy: sum
+		sourceColumn: QtyOrdered
+
+		annotation SummarizationSetBy = Automatic
+
+	column MovementQty
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c2b0ef1-5af0-4aec-8a22-c387bb8f5083
+		summarizeBy: sum
+		sourceColumn: MovementQty
+
+		annotation SummarizationSetBy = Automatic
+
+	column PurchaseCost
+		dataType: int64
+		formatString: 0
+		lineageTag: f94c2df8-38ac-4913-aa94-fed35b3999a4
+		summarizeBy: sum
+		sourceColumn: PurchaseCost
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 0ca7406c-c1bd-43d9-881f-fbab9263d4e9
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Lead Time' = ```
+			
+			 DATEDIFF(Purchase[OrderDate], Purchase[Date], DAY)
+			```
+		formatString: 0
+		lineageTag: 7f81c533-c69a-42dc-ac24-0a39ccf0c85c
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Purchase = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Power BI Projects\Inventory Management\Sources\Sources.xlsx"), null, true),
+				    Purchase_Table = Source{[Item="Purchase",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Purchase_Table,{{"PurchaseID", type text}, {"ProductID", Int64.Type}, {"SupplierID", type text}, {"OrderDate", type date}, {"ArrivalDate", type date}, {"QtyOrdered", Int64.Type}, {"QtyReceived", Int64.Type}, {"PurchaseCost", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"ArrivalDate", "Date"}, {"QtyReceived", "MovmentQty"}}),
+				    #"Added Custom" = Table.AddColumn(#"Renamed Columns", "Type", each "Purchase"),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Custom",{{"Type", type text}}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Changed Type1",{{"MovmentQty", "MovementQty"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

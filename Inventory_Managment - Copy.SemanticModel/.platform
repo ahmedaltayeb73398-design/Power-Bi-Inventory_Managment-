@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Inventory_Managment - Copy"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e23e317e-2d99-4f6e-a3a0-cb02177ef9f3"
+  }
+}

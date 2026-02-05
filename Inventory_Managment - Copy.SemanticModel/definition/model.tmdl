@@ -1,0 +1,28 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Fact_Sales","Opening","Products","Purchase","Suppliers","Fact_Inventory_Movements"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Fact_Sales
+ref table DateTableTemplate_9579d391-9803-4682-90e7-8717ebf5aed3
+ref table LocalDateTable_8ff99f16-f832-403b-be35-a015eb3f9360
+ref table Opening
+ref table LocalDateTable_136fd831-c659-4539-ac38-aedd5e61ce93
+ref table Products
+ref table Purchase
+ref table LocalDateTable_a14b65d9-1ae4-496e-a84d-03333c407aa3
+ref table Suppliers
+ref table DimDate
+ref table Fact_Inventory_Movements
+
+ref cultureInfo en-US
+

@@ -1,0 +1,21 @@
+ProductID,ProductName,Category,UnitCost,Target_Daily_Sales
+1,MacBook Pro 14,Laptops,1800,1
+2,Logitech MX Master 3,Accessories,80,5
+3,Samsung Odyssey G7,Screens,550,2
+4,Sandisk 1TB SSD,Storage,90,4
+5,Keychron K2 Keyboard,Accessories,70,3
+6,Dell XPS 15,Laptops,1500,1
+7,Sony WH-1000XM5,Accessories,280,2
+8,Seagate 4TB HDD,Storage,80,6
+9,Asus ROG Monitor,Screens,400,2
+10,HP Laserjet Printer,Office,180,1
+11,Apple Airpods Pro,Accessories,190,4
+12,Lenovo ThinkPad X1,Laptops,1400,1
+13,Western Digital 2TB,Storage,55,5
+14,USB-C Hub Multiport,Accessories,40,8
+15,SteelSeries Arctis 7,Accessories,140,3
+16,Epson EcoTank,Office,250,1
+17,LG C3 OLED 42,Screens,900,1
+18,iPad Air 256GB,Tablets,550,2
+19,Anker PowerBank 20k,Accessories,45,7
+20,Microsoft Surface Pen,Accessories,85,2

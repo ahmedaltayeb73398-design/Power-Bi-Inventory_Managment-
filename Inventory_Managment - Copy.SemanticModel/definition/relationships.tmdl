@@ -1,0 +1,47 @@
+relationship e27bb336-057b-4bf7-a6d4-f366c05e1d1b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Sales.Date
+	toColumn: LocalDateTable_8ff99f16-f832-403b-be35-a015eb3f9360.Date
+
+relationship 23a70e54-966f-4e71-a422-885cc72e6cdc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Opening.Date
+	toColumn: LocalDateTable_136fd831-c659-4539-ac38-aedd5e61ce93.Date
+
+relationship 9aea695b-8f1a-46b7-9349-b9760469f625
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Purchase.Date
+	toColumn: LocalDateTable_a14b65d9-1ae4-496e-a84d-03333c407aa3.Date
+
+relationship c8d4e90d-05e1-295f-cc6a-5d60ca63b98d
+	isActive: false
+	fromColumn: Purchase.OrderDate
+	toColumn: DimDate.FullDate
+
+relationship 4d695508-b135-083a-4f74-2c549f6b409c
+	fromColumn: Purchase.ProductID
+	toColumn: Products.ProductID
+
+relationship 98b96d0c-b723-e90d-698e-6d8313ccb944
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: Suppliers.ProductID
+	toColumn: Purchase.ProductID
+
+relationship 1785f16e-2a68-c171-a6bf-6c8a1a2b892b
+	isActive: false
+	fromColumn: Suppliers.ProductID
+	toColumn: Products.ProductID
+
+relationship AutoDetected_acf4d690-7426-4e9b-8a64-09fdb0418b6e
+	fromColumn: Fact_Inventory_Movements.ProductID
+	toColumn: Products.ProductID
+
+relationship AutoDetected_2f7c68bd-10cf-495c-8ed5-696cab5d59ea
+	fromColumn: Fact_Inventory_Movements.ProductID
+	toColumn: Opening.ProductID
+
+relationship f438c2bf-d879-b208-d962-f894de2eced9
+	fromColumn: Fact_Inventory_Movements.Date
+	toColumn: DimDate.FullDate
+

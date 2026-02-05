@@ -1,0 +1,60 @@
+table Products
+	lineageTag: 9ab4a67e-a9e4-4589-82c3-3fde76391ced
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 7e22a12c-c83e-43d6-b512-1cebcdea39ce
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 93bb62db-1636-4ea4-922b-fb10f332dd8a
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 5d6e822e-3d6d-4fd4-bcc5-63875f8b4872
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitCost
+		dataType: int64
+		formatString: 0
+		lineageTag: 64a20583-c8b6-44a9-aed1-4a1a12119110
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+		annotation SummarizationSetBy = Automatic
+
+	column Target_Daily_Sales
+		dataType: int64
+		formatString: 0
+		lineageTag: 7310344e-e349-42e5-b88a-70f4101ac590
+		summarizeBy: sum
+		sourceColumn: Target_Daily_Sales
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Power BI Projects\Inventory Management\Sources\Sources.xlsx"), null, true),
+				    Products_Table = Source{[Item="Products",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Products_Table,{{"ProductID", Int64.Type}, {"ProductName", type text}, {"Category", type text}, {"UnitCost", Int64.Type}, {"Target_Daily_Sales", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

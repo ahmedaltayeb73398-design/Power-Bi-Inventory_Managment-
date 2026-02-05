@@ -1,0 +1,85 @@
+table Fact_Sales
+	lineageTag: 956a935e-eb3b-4c1b-b3ef-1c5fea48c908
+
+	column SaleID
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ae404f4-2eff-405d-ae83-0ff61dcdadbd
+		summarizeBy: count
+		sourceColumn: SaleID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c595b90d-69b3-4416-a3ca-0cabc15234de
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: e27bb336-057b-4bf7-a6d4-f366c05e1d1b
+			defaultHierarchy: LocalDateTable_8ff99f16-f832-403b-be35-a015eb3f9360.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 6ddecec0-4be6-46d4-ba12-c585bcb03613
+		summarizeBy: count
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesPrice
+		dataType: int64
+		formatString: 0
+		lineageTag: e7ad7657-5a6f-4c6d-9523-6e013f97d7f5
+		summarizeBy: sum
+		sourceColumn: SalesPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 08c9c9e4-4a6a-4630-bf66-f7f82d15cb50
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column MovementQty
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ca10fd4-b467-4a89-bd8a-83171f437022
+		summarizeBy: sum
+		sourceColumn: MovementQty
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Sales = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Power BI Projects\Inventory Management\Sources\Sources.xlsx"), null, true),
+				    Fact_Sales_Table = Source{[Item="Fact_Sales",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Fact_Sales_Table,{{"SaleID", Int64.Type}, {"Date", type date}, {"ProductID", Int64.Type}, {"Quantity", Int64.Type}, {"SalesPrice", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Quantity", "MovementQty"}}),
+				    #"Added Custom" = Table.AddColumn(#"Renamed Columns", "Type", each "Sale"),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Custom",{{"Type", type text}}),
+				    #"Added Custom1" = Table.AddColumn(#"Changed Type1", "Custom", each -[MovementQty]),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Added Custom1",{{"MovementQty", "MovementQty2"}, {"Custom", "MovementQty"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns1",{"MovementQty2"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Removed Columns",{{"MovementQty", Int64.Type}}),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Changed Type2",{{"MovementQty", "MovementQty"}})
+				in
+				    #"Renamed Columns2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

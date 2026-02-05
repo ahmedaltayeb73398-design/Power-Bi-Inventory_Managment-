@@ -1,0 +1,18 @@
+SupplierID,SupplierName,ProductID,LeadTime_Days
+S01,Global Tech Distro,1,12
+S01,Global Tech Distro,6,12
+S01,Global Tech Distro,12,14
+S02,Logi Logistics,2,5
+S02,Logi Logistics,5,7
+S02,Logi Logistics,14,4
+S03,Storage Solutions,4,3
+S03,Storage Solutions,8,5
+S03,Storage Solutions,13,3
+S04,Display Expert,3,10
+S04,Display Expert,9,8
+S04,Display Expert,17,15
+S05,Accessories Plus,7,6
+S05,Accessories Plus,11,5
+S05,Accessories Plus,15,7
+S05,Accessories Plus,19,4
+S05,Accessories Plus,20,5

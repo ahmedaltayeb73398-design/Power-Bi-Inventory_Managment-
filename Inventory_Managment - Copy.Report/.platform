@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Inventory_Managment - Copy"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b316cd9d-70cc-4b80-9f63-5895bcc90a61"
+  }
+}

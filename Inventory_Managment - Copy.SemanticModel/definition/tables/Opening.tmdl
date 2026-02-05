@@ -1,0 +1,60 @@
+table Opening
+	lineageTag: b6455fa6-0a17-4d43-8652-ba26d939abac
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: f274c4e3-1eb5-4de6-a1db-fc51fe6c56a9
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b60e4b84-ad8c-440a-a76b-9323163f5f85
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 23a70e54-966f-4e71-a422-885cc72e6cdc
+			defaultHierarchy: LocalDateTable_136fd831-c659-4539-ac38-aedd5e61ce93.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MovementQty
+		dataType: int64
+		formatString: 0
+		lineageTag: eb81c67a-9544-457d-8235-f7f1ff74829a
+		summarizeBy: sum
+		sourceColumn: MovementQty
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 33946019-8b77-4c70-95d2-f9c965871642
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Opening = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Power BI Projects\Inventory Management\Sources\Sources.xlsx"), null, true),
+				    Opening_Table = Source{[Item="Opening",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Opening_Table,{{"ProductID", Int64.Type}, {"Date", type date}, {"MovementQty", Int64.Type}, {"Type", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"MovementQty", "MovementQty"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
