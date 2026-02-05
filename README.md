@@ -27,14 +27,14 @@ All data tables are included in the `Dataset` folder as CSV file.
 ---
 
 ## 📷 Dashboard Preview
-Here are screenshots of the dashboard:
 ![Main View](Shots/Page1.jpg)
+## Page 2 Preview
+![Main View](Shots/Page2.jpg)
+## Page3 Preview
+![Main View](Shots/Page3.jpg)
+## Data Model Preview
+![Main View](Shots/Data_Model.jpg)
 
-
----
-
-## 📦 Full Project
-A complete project file is available as a pbix: `Cash Flow Risk Analysis.pbix`
 
 
 
